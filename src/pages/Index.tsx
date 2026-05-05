@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Code2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { EXAMPLES } from "@/lib/examples";
 
@@ -34,10 +34,20 @@ const Index = () => {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-2xl px-5 py-10">
-        <header className="mb-8 text-center">
-          <h1 className="text-4xl font-bold tracking-tight">CodeBuddy</h1>
-          <p className="mt-2 text-muted-foreground">
-            Explain code. Crack exams.
+        <header className="mb-8 flex flex-col items-center text-center">
+          <div
+            className="mb-5 flex h-20 w-20 items-center justify-center rounded-[28%] bg-primary text-primary-foreground"
+            style={{
+              boxShadow:
+                "0 0 60px 0 hsl(var(--primary) / 0.55), 0 0 120px 10px hsl(var(--primary) / 0.25)",
+            }}
+            aria-hidden
+          >
+            <Code2 className="h-10 w-10" strokeWidth={2.5} />
+          </div>
+          <h1 className="text-5xl font-extrabold tracking-tight">CodeBuddy</h1>
+          <p className="mt-3 text-muted-foreground">
+            Explain code · Crack exams
           </p>
         </header>
 
