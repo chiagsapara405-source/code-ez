@@ -116,6 +116,7 @@ const Result = () => {
                 icon="💡"
                 title="Corrected Code"
                 code={data.fixed_code}
+                originalCode={state.code}
               />
             )}
             <ResultCard
