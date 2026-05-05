@@ -6,32 +6,43 @@ const corsHeaders = {
 
 const SYSTEM = "You are a beginner-friendly programming tutor.";
 
-function buildPrompt(code: string, language: string) {
-  return `Analyze the following code:
+function buildPrompt(code: string, language: string, examMode: boolean) {
+  return `You are a programming tutor focused on helping students pass exams.
 
+Analyze the following code.
+
+Code:
 ${code}
 
-Language: ${language}
+Language:
+${language}
 
-Return output in JSON format:
-
-{
-  "explanation": "Line-by-line explanation in simple terms",
-  "summary": "2-3 line summary",
-  "mistakes": "List mistakes or bad practices",
-  "fixed_code": "Corrected and improved version of the code",
-  "questions": ["5 exam questions"],
-  "tasks": ["3 practice tasks"]
-}
+Mode:
+Exam Mode ${examMode ? "ON" : "OFF"}
 
 Rules:
-- Fix logical errors
-- Improve readability
-- Use best practices
-- Keep it beginner-friendly
-- Do NOT overcomplicate the code
+- Keep answers concise and structured
+- Use bullet points where possible
+- Avoid long paragraphs
+- Focus on exam-relevant insights
 
-Keep explanations simple and beginner-friendly. For "fixed_code", return ONLY the raw code as a string (preserve newlines and indentation, no markdown fences). Respond with ONLY valid JSON, no markdown fences.`;
+Return STRICT JSON ONLY:
+
+{
+  "summary": "2-3 lines max",
+  "concepts": ["key concept 1", "key concept 2"],
+  "mistakes": ["mistake 1", "mistake 2"],
+  "questions": ["question 1", "question 2", "question 3", "question 4", "question 5"],
+  "tasks": ["task 1", "task 2", "task 3"],
+  "explanation": ["step 1", "step 2", "step 3"],
+  "fixed_code": "Corrected and improved version of the code as raw string (no markdown fences)"
+}
+
+If Exam Mode is ON:
+- Prioritize questions and summary
+- Keep explanation very short (1-3 steps)
+
+Return valid JSON only. No extra text. For "fixed_code", return ONLY the raw code as a string (preserve newlines and indentation, no markdown fences).`;
 }
 
 function safeParse(text: string) {
@@ -56,7 +67,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { code, language } = await req.json();
+    const { code, language, examMode } = await req.json();
     if (!code || typeof code !== "string" || !language) {
       return new Response(
         JSON.stringify({ error: "Missing code or language" }),
@@ -82,7 +93,7 @@ Deno.serve(async (req) => {
         model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: SYSTEM },
-          { role: "user", content: buildPrompt(code, language) },
+          { role: "user", content: buildPrompt(code, language, !!examMode) },
         ],
       }),
     });
@@ -118,19 +129,23 @@ Deno.serve(async (req) => {
       );
     }
 
+    const toArr = (v: unknown): string[] =>
+      Array.isArray(v) ? v.map(String) : typeof v === "string" && v.trim() ? [v] : [];
+
     const result = {
-      explanation: typeof parsed.explanation === "string" ? parsed.explanation : "",
-      summary: typeof parsed.summary === "string" ? parsed.summary : "",
-      mistakes: typeof parsed.mistakes === "string"
-        ? parsed.mistakes
-        : Array.isArray(parsed.mistakes)
-        ? parsed.mistakes.join("\n")
+      summary: typeof parsed.summary === "string"
+        ? parsed.summary
+        : Array.isArray(parsed.summary)
+        ? parsed.summary.join("\n")
         : "",
+      concepts: toArr(parsed.concepts),
+      mistakes: toArr(parsed.mistakes),
+      questions: toArr(parsed.questions),
+      tasks: toArr(parsed.tasks),
+      explanation: toArr(parsed.explanation),
       fixed_code: typeof parsed.fixed_code === "string"
         ? parsed.fixed_code.replace(/^```[a-zA-Z]*\n?|\n?```$/g, "")
         : "",
-      questions: Array.isArray(parsed.questions) ? parsed.questions.map(String) : [],
-      tasks: Array.isArray(parsed.tasks) ? parsed.tasks.map(String) : [],
     };
 
     return new Response(JSON.stringify(result), {

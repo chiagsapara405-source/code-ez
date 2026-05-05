@@ -1,15 +1,28 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { ArrowLeft, Loader2, Brain, Pin, AlertTriangle, Lightbulb, HelpCircle, FlaskConical } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
+  ArrowLeft,
+  Loader2,
+  Brain,
+  Pin,
+  AlertTriangle,
+  Lightbulb,
+  HelpCircle,
+  FlaskConical,
+  ChevronDown,
+} from "lucide-react";
 import { toast } from "sonner";
 import { ResultCard } from "@/components/ResultCard";
 import { CodeCard } from "@/components/CodeCard";
 import { explainCode, type ExplainResult } from "@/services/explainCode";
 
-type LocationState = { code?: string; language?: string };
+type LocationState = { code?: string; language?: string; examMode?: boolean };
 
 const Result = () => {
   const navigate = useNavigate();
@@ -19,7 +32,8 @@ const Result = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<ExplainResult | null>(null);
-  const [examMode, setExamMode] = useState(false);
+  const [explainOpen, setExplainOpen] = useState(false);
+  const examMode = !!state.examMode;
 
   useEffect(() => {
     if (!state.code || !state.language) {
@@ -31,7 +45,7 @@ const Result = () => {
       try {
         setLoading(true);
         setError(null);
-        const result = await explainCode(state.code!, state.language!);
+        const result = await explainCode(state.code!, state.language!, examMode);
         if (!cancelled) setData(result);
       } catch (e) {
         const msg = e instanceof Error ? e.message : "Something went wrong";
@@ -46,7 +60,7 @@ const Result = () => {
     return () => {
       cancelled = true;
     };
-  }, [state.code, state.language, navigate]);
+  }, [state.code, state.language, examMode, navigate]);
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -61,17 +75,11 @@ const Result = () => {
             <ArrowLeft className="h-4 w-4" />
             Back
           </Button>
-
-          <div className="flex items-center gap-2">
-            <Label htmlFor="exam-mode" className="text-sm text-muted-foreground">
+          {examMode && (
+            <span className="rounded-full bg-primary/15 px-3 py-1 text-xs font-medium text-primary">
               Exam Mode
-            </Label>
-            <Switch
-              id="exam-mode"
-              checked={examMode}
-              onCheckedChange={setExamMode}
-            />
-          </div>
+            </span>
+          )}
         </div>
 
         <h1 className="mb-1 text-2xl font-bold">Results</h1>
@@ -96,22 +104,40 @@ const Result = () => {
 
         {!loading && !error && data && (
           <div className="space-y-4">
-            {!examMode && (
+            {data.summary && (
+              <ResultCard icon={Pin} title="Summary" content={data.summary} />
+            )}
+            {data.concepts.length > 0 && (
               <ResultCard
                 icon={Brain}
-                title="Explanation"
-                content={data.explanation}
+                title="Key Concepts"
+                content={data.concepts}
               />
             )}
-            <ResultCard icon={Pin} title="Summary" content={data.summary} />
-            {!examMode && (
+            {data.mistakes.length > 0 && (
               <ResultCard
                 icon={AlertTriangle}
                 title="Mistakes"
                 content={data.mistakes}
               />
             )}
-            {!examMode && (
+            {data.questions.length > 0 && (
+              <ResultCard
+                icon={HelpCircle}
+                title="Exam Questions"
+                content={data.questions}
+                ordered
+              />
+            )}
+            {data.tasks.length > 0 && (
+              <ResultCard
+                icon={FlaskConical}
+                title="Practice Tasks"
+                content={data.tasks}
+                ordered
+              />
+            )}
+            {data.fixed_code && (
               <CodeCard
                 icon={Lightbulb}
                 title="Corrected Code"
@@ -119,19 +145,39 @@ const Result = () => {
                 originalCode={state.code}
               />
             )}
-            <ResultCard
-              icon={HelpCircle}
-              title="Exam Questions"
-              content={data.questions}
-              ordered
-            />
-            {!examMode && (
-              <ResultCard
-                icon={FlaskConical}
-                title="Practice Tasks"
-                content={data.tasks}
-                ordered
-              />
+            {data.explanation.length > 0 && (
+              <Collapsible open={explainOpen} onOpenChange={setExplainOpen}>
+                <div className="rounded-2xl border border-border bg-card">
+                  <CollapsibleTrigger className="flex w-full items-center justify-between p-5 text-left">
+                    <span className="flex items-center gap-3 text-base font-semibold tracking-tight">
+                      <span
+                        className="flex h-9 w-9 items-center justify-center rounded-[28%] bg-primary text-primary-foreground"
+                        style={{
+                          boxShadow:
+                            "0 0 18px 0 hsl(var(--primary) / 0.45), 0 0 36px 4px hsl(var(--primary) / 0.18)",
+                        }}
+                      >
+                        <Brain className="h-4.5 w-4.5" strokeWidth={2.5} size={18} />
+                      </span>
+                      Explanation
+                    </span>
+                    <ChevronDown
+                      className={`h-4 w-4 text-muted-foreground transition-transform ${
+                        explainOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <div className="px-5 pb-5">
+                      <ol className="list-decimal list-inside space-y-2 text-sm text-foreground/90">
+                        {data.explanation.map((s, i) => (
+                          <li key={i} className="leading-relaxed">{s}</li>
+                        ))}
+                      </ol>
+                    </div>
+                  </CollapsibleContent>
+                </div>
+              </Collapsible>
             )}
           </div>
         )}
