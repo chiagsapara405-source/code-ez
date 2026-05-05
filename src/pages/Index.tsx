@@ -11,12 +11,15 @@ import {
 } from "@/components/ui/select";
 import { Sparkles, Code2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { EXAMPLES } from "@/lib/examples";
 
 const Index = () => {
   const navigate = useNavigate();
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("JavaScript");
+  const [examMode, setExamMode] = useState(false);
 
   const disabled = code.trim().length === 0;
 
@@ -28,7 +31,7 @@ const Index = () => {
 
   const onSubmit = () => {
     if (disabled) return;
-    navigate("/result", { state: { code, language } });
+    navigate("/result", { state: { code: code.trim(), language, examMode } });
   };
 
   return (
@@ -47,7 +50,7 @@ const Index = () => {
           </div>
           <h1 className="text-5xl font-extrabold tracking-tight">CodeBuddy</h1>
           <p className="mt-3 text-muted-foreground">
-            Explain code · Crack exams
+            Understand code. Prepare for exams.
           </p>
         </header>
 
@@ -111,8 +114,24 @@ const Index = () => {
               size="lg"
             >
               <Sparkles className="h-4 w-4" />
-              Explain Code
+              Analyze Code
             </Button>
+          </div>
+
+          <div className="flex items-center justify-between rounded-xl border border-border bg-background px-4 py-3">
+            <div>
+              <Label htmlFor="exam-mode" className="text-sm font-medium">
+                Exam Mode
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                Prioritize questions & summary
+              </p>
+            </div>
+            <Switch
+              id="exam-mode"
+              checked={examMode}
+              onCheckedChange={setExamMode}
+            />
           </div>
         </section>
 
