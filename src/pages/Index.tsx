@@ -10,6 +10,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Sparkles } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { EXAMPLES } from "@/lib/examples";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -17,6 +19,12 @@ const Index = () => {
   const [language, setLanguage] = useState("JavaScript");
 
   const disabled = code.trim().length === 0;
+
+  const loadExample = (i: number) => {
+    const ex = EXAMPLES[i];
+    setCode(ex.code);
+    setLanguage(ex.language);
+  };
 
   const onSubmit = () => {
     if (disabled) return;
@@ -34,7 +42,35 @@ const Index = () => {
         </header>
 
         <section className="space-y-4 rounded-2xl border border-border bg-card p-5">
-          <label className="block text-sm font-medium">Your code</label>
+          <div className="flex items-center justify-between">
+            <label className="block text-sm font-medium">Your code</label>
+            {code && (
+              <button
+                type="button"
+                onClick={() => setCode("")}
+                className="text-xs text-muted-foreground hover:text-foreground"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+
+          <div>
+            <p className="mb-2 text-xs text-muted-foreground">Try an example:</p>
+            <div className="flex flex-wrap gap-2">
+              {EXAMPLES.map((ex, i) => (
+                <Badge
+                  key={ex.label}
+                  variant="secondary"
+                  onClick={() => loadExample(i)}
+                  className="cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors px-3 py-1.5 rounded-full text-xs font-normal"
+                >
+                  {ex.label}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
           <Textarea
             value={code}
             onChange={(e) => setCode(e.target.value)}
