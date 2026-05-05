@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, Brain, Pin, AlertTriangle, Lightbulb, HelpCircle, FlaskConical } from "lucide-react";
 import { toast } from "sonner";
 import { ResultCard } from "@/components/ResultCard";
 import { CodeCard } from "@/components/CodeCard";
@@ -98,36 +98,36 @@ const Result = () => {
           <div className="space-y-4">
             {!examMode && (
               <ResultCard
-                icon="🧠"
+                icon={Brain}
                 title="Explanation"
                 content={data.explanation}
               />
             )}
-            <ResultCard icon="📌" title="Summary" content={data.summary} />
+            <ResultCard icon={Pin} title="Summary" content={data.summary} />
             {!examMode && (
               <ResultCard
-                icon="⚠️"
+                icon={AlertTriangle}
                 title="Mistakes"
                 content={data.mistakes}
               />
             )}
             {!examMode && (
               <CodeCard
-                icon="💡"
+                icon={Lightbulb}
                 title="Corrected Code"
                 code={data.fixed_code}
                 originalCode={state.code}
               />
             )}
             <ResultCard
-              icon="❓"
+              icon={HelpCircle}
               title="Exam Questions"
               content={data.questions}
               ordered
             />
             {!examMode && (
               <ResultCard
-                icon="🧪"
+                icon={FlaskConical}
                 title="Practice Tasks"
                 content={data.tasks}
                 ordered

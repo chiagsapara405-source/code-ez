@@ -1,17 +1,17 @@
-import { useState } from "react";
+import { useState, type ComponentType } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, type LucideProps } from "lucide-react";
 import { toast } from "sonner";
 
 type Props = {
-  icon: string;
+  icon: ComponentType<LucideProps>;
   title: string;
   content: string | string[];
   ordered?: boolean;
 };
 
-export const ResultCard = ({ icon, title, content, ordered }: Props) => {
+export const ResultCard = ({ icon: Icon, title, content, ordered }: Props) => {
   const [copied, setCopied] = useState(false);
 
   const text = Array.isArray(content)
@@ -34,9 +34,18 @@ export const ResultCard = ({ icon, title, content, ordered }: Props) => {
   return (
     <Card className="bg-card border-border p-5 rounded-2xl">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-base font-semibold flex items-center gap-2">
-          <span aria-hidden>{icon}</span>
-          <span>{title}</span>
+        <h2 className="text-base font-semibold flex items-center gap-3">
+          <span
+            className="flex h-9 w-9 items-center justify-center rounded-[28%] bg-primary text-primary-foreground"
+            style={{
+              boxShadow:
+                "0 0 18px 0 hsl(var(--primary) / 0.45), 0 0 36px 4px hsl(var(--primary) / 0.18)",
+            }}
+            aria-hidden
+          >
+            <Icon className="h-4.5 w-4.5" strokeWidth={2.5} size={18} />
+          </span>
+          <span className="tracking-tight">{title}</span>
         </h2>
         <Button
           size="sm"
