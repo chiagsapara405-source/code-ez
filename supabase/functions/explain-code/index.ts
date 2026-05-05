@@ -19,11 +19,19 @@ Return output in JSON format:
   "explanation": "Line-by-line explanation in simple terms",
   "summary": "2-3 line summary",
   "mistakes": "List mistakes or bad practices",
+  "fixed_code": "Corrected and improved version of the code",
   "questions": ["5 exam questions"],
   "tasks": ["3 practice tasks"]
 }
 
-Keep explanations simple and beginner-friendly. Respond with ONLY valid JSON, no markdown fences.`;
+Rules:
+- Fix logical errors
+- Improve readability
+- Use best practices
+- Keep it beginner-friendly
+- Do NOT overcomplicate the code
+
+Keep explanations simple and beginner-friendly. For "fixed_code", return ONLY the raw code as a string (preserve newlines and indentation, no markdown fences). Respond with ONLY valid JSON, no markdown fences.`;
 }
 
 function safeParse(text: string) {
@@ -117,6 +125,9 @@ Deno.serve(async (req) => {
         ? parsed.mistakes
         : Array.isArray(parsed.mistakes)
         ? parsed.mistakes.join("\n")
+        : "",
+      fixed_code: typeof parsed.fixed_code === "string"
+        ? parsed.fixed_code.replace(/^```[a-zA-Z]*\n?|\n?```$/g, "")
         : "",
       questions: Array.isArray(parsed.questions) ? parsed.questions.map(String) : [],
       tasks: Array.isArray(parsed.tasks) ? parsed.tasks.map(String) : [],

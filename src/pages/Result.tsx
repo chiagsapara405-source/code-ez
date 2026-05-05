@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { ResultCard } from "@/components/ResultCard";
+import { CodeCard } from "@/components/CodeCard";
 import { explainCode, type ExplainResult } from "@/services/explainCode";
 
 type LocationState = { code?: string; language?: string };
@@ -108,6 +109,13 @@ const Result = () => {
                 icon="⚠️"
                 title="Mistakes"
                 content={data.mistakes}
+              />
+            )}
+            {!examMode && (
+              <CodeCard
+                icon="💡"
+                title="Corrected Code"
+                code={data.fixed_code}
               />
             )}
             <ResultCard
