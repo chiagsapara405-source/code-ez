@@ -4,6 +4,7 @@ export type ExplainResult = {
   explanation: string;
   summary: string;
   mistakes: string;
+  fixed_code: string;
   questions: string[];
   tasks: string[];
 };
