@@ -1,18 +1,19 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Copy, Check, GitCompare } from "lucide-react";
+import { Copy, Check, GitCompare, Lightbulb, type LucideProps } from "lucide-react";
+import type { ComponentType } from "react";
 import { toast } from "sonner";
 import { diffLines, diffStats } from "@/lib/diff";
 
 type Props = {
-  icon?: string;
+  icon?: ComponentType<LucideProps>;
   title: string;
   code: string;
   originalCode?: string;
 };
 
-export const CodeCard = ({ icon = "💡", title, code, originalCode }: Props) => {
+export const CodeCard = ({ icon: Icon = Lightbulb, title, code, originalCode }: Props) => {
   const [copied, setCopied] = useState(false);
   const [showDiff, setShowDiff] = useState(true);
   const display = code?.trim() ? code : "No improved code available";
@@ -35,8 +36,17 @@ export const CodeCard = ({ icon = "💡", title, code, originalCode }: Props) =>
     <Card className="bg-card border-border p-5 rounded-2xl">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-base font-semibold flex items-center gap-2">
-          <span aria-hidden>{icon}</span>
-          <span>{title}</span>
+          <span
+            className="flex h-9 w-9 items-center justify-center rounded-[28%] bg-primary text-primary-foreground"
+            style={{
+              boxShadow:
+                "0 0 18px 0 hsl(var(--primary) / 0.45), 0 0 36px 4px hsl(var(--primary) / 0.18)",
+            }}
+            aria-hidden
+          >
+            <Icon size={18} strokeWidth={2.5} />
+          </span>
+          <span className="tracking-tight">{title}</span>
           {canDiff && (stats.added > 0 || stats.removed > 0) && (
             <span className="ml-1 flex items-center gap-1 text-xs font-mono">
               <span className="text-emerald-400">+{stats.added}</span>
