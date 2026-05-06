@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { EXAMPLES } from "@/lib/examples";
+import { AppNav } from "@/components/AppNav";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ const Index = () => {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
+      <AppNav />
       <div className="mx-auto max-w-2xl px-5 py-10">
         <header className="mb-8 flex flex-col items-center text-center">
           <div
