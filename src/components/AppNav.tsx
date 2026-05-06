@@ -1,8 +1,10 @@
 import { NavLink } from "react-router-dom";
-import { Home, GraduationCap } from "lucide-react";
+import { Home, Brain, Wrench, GraduationCap } from "lucide-react";
 
 const tabs = [
   { to: "/", label: "Home", icon: Home, end: true },
+  { to: "/explain", label: "Explain Code", icon: Brain },
+  { to: "/refine", label: "Refine Code", icon: Wrench },
   { to: "/academy", label: "Practice Academy", icon: GraduationCap },
 ];
 
