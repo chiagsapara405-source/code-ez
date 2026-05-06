@@ -8,6 +8,7 @@ import Result from "./pages/Result.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Academy from "./pages/Academy.tsx";
 import TopicDetail from "./pages/TopicDetail.tsx";
+import Refine from "./pages/Refine.tsx";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/explain" element={<Index />} />
+          <Route path="/refine" element={<Refine />} />
           <Route path="/result" element={<Result />} />
           <Route path="/academy" element={<Academy />} />
           <Route path="/academy/:id" element={<TopicDetail />} />
