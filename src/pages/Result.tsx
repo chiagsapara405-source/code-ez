@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { ResultCard } from "@/components/ResultCard";
 import { CodeCard } from "@/components/CodeCard";
 import { explainCode, type ExplainResult } from "@/services/explainCode";
+import { AppNav } from "@/components/AppNav";
 
 type LocationState = { code?: string; language?: string; examMode?: boolean };
 
@@ -64,6 +65,7 @@ const Result = () => {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
+      <AppNav />
       <div className="mx-auto max-w-2xl px-5 py-6">
         <div className="mb-5 flex items-center justify-between gap-3">
           <Button
