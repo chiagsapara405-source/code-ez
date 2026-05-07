@@ -36,7 +36,7 @@ const Index = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="min-h-screen bg-background text-foreground pb-24">
       <AppNav />
       <div className="mx-auto max-w-2xl px-5 py-10">
         <header className="mb-8 flex flex-col items-center text-center">

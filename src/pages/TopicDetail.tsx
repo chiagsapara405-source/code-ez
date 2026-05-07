@@ -236,7 +236,7 @@ const TopicDetail = () => {
   const Icon = topic.icon;
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="min-h-screen bg-background text-foreground pb-24">
       <AppNav />
       <div className="mx-auto max-w-3xl px-5 py-6">
         <div className="mb-5">
