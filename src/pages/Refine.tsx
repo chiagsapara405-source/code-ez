@@ -2,7 +2,7 @@ import { AppNav } from "@/components/AppNav";
 import { Wrench } from "lucide-react";
 
 const Refine = () => (
-  <main className="min-h-screen bg-background text-foreground">
+  <main className="min-h-screen bg-background text-foreground pb-24">
     <AppNav />
     <div className="mx-auto max-w-2xl px-5 py-16 text-center">
       <div
