@@ -33,15 +33,9 @@ const SectionHeader = ({
   icon: any;
   title: string;
 }) => (
-  <h2 className="mb-3 flex items-center gap-3 text-base font-semibold tracking-tight">
-    <span
-      className="flex h-9 w-9 items-center justify-center rounded-[28%] bg-primary text-primary-foreground"
-      style={{
-        boxShadow:
-          "0 0 18px 0 hsl(var(--primary) / 0.45), 0 0 36px 4px hsl(var(--primary) / 0.18)",
-      }}
-    >
-      <Icon size={18} strokeWidth={2.5} />
+  <h2 className="mb-4 flex items-center gap-3 text-[15px] font-semibold tracking-tight">
+    <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary">
+      <Icon size={16} strokeWidth={2.4} />
     </span>
     {title}
   </h2>
@@ -51,7 +45,7 @@ const QuizBlock = ({ lesson }: { lesson: Lesson }) => {
   const [picked, setPicked] = useState<Record<number, number>>({});
   if (!lesson.quiz?.length) return null;
   return (
-    <Card className="bg-card border-border p-5 rounded-2xl">
+    <Card className="surface-card p-6">
       <SectionHeader icon={HelpCircle} title="Quick Quiz" />
       <div className="space-y-5">
         {lesson.quiz.map((q, qi) => {
@@ -67,13 +61,13 @@ const QuizBlock = ({ lesson }: { lesson: Lesson }) => {
                   const isCorrect = oi === q.answer_index;
                   const isChosen = chosen === oi;
                   let cls =
-                    "flex items-center justify-between gap-2 rounded-xl border border-border bg-background px-3 py-2 text-left text-sm transition-colors hover:border-primary/50";
+                    "flex items-center justify-between gap-2 rounded-xl border border-white/[0.05] bg-background/60 px-3 py-2.5 text-[13.5px] transition-colors hover:border-primary/40";
                   if (answered && isCorrect)
                     cls =
-                      "flex items-center justify-between gap-2 rounded-xl border border-emerald-500/50 bg-emerald-500/10 px-3 py-2 text-left text-sm";
+                      "flex items-center justify-between gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-3 py-2.5 text-[13.5px]";
                   else if (answered && isChosen && !isCorrect)
                     cls =
-                      "flex items-center justify-between gap-2 rounded-xl border border-rose-500/50 bg-rose-500/10 px-3 py-2 text-left text-sm";
+                      "flex items-center justify-between gap-2 rounded-xl border border-rose-500/40 bg-rose-500/10 px-3 py-2.5 text-[13.5px]";
                   return (
                     <button
                       key={oi}
@@ -135,21 +129,21 @@ const MentorChat = ({ topicTitle, lesson }: { topicTitle: string; lesson: Lesson
   ];
 
   return (
-    <Card className="bg-card border-border p-5 rounded-2xl">
+    <Card className="surface-card p-6">
       <SectionHeader icon={Bot} title="Ask Buddy" />
       <div
         ref={scrollRef}
-        className="max-h-72 overflow-y-auto space-y-3 mb-3 pr-1"
+        className="max-h-72 overflow-y-auto space-y-3 mb-4 pr-1"
       >
         {messages.length === 0 && (
-          <div className="text-sm text-muted-foreground">
-            <p className="mb-2">Ask Buddy anything about {topicTitle}.</p>
+          <div className="text-[13.5px] text-muted-foreground">
+            <p className="mb-3 prose-lesson">Ask Buddy anything about {topicTitle}.</p>
             <div className="flex flex-wrap gap-2">
               {suggestions.map((s) => (
                 <button
                   key={s}
                   onClick={() => send(s)}
-                  className="rounded-full border border-border bg-background px-3 py-1 text-xs hover:border-primary/50"
+                  className="rounded-full border border-white/[0.06] bg-background/60 px-3 py-1.5 text-[12px] hover:border-primary/40"
                 >
                   {s}
                 </button>
@@ -160,10 +154,10 @@ const MentorChat = ({ topicTitle, lesson }: { topicTitle: string; lesson: Lesson
         {messages.map((m, i) => (
           <div
             key={i}
-            className={`text-sm rounded-2xl px-3 py-2 max-w-[90%] whitespace-pre-wrap ${
+            className={`text-[13.5px] rounded-2xl px-3.5 py-2.5 max-w-[90%] whitespace-pre-wrap leading-relaxed ${
               m.role === "user"
                 ? "ml-auto bg-primary text-primary-foreground"
-                : "bg-background border border-border"
+                : "bg-background/60 border border-white/[0.05]"
             }`}
           >
             {m.content}
@@ -186,9 +180,9 @@ const MentorChat = ({ topicTitle, lesson }: { topicTitle: string; lesson: Lesson
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask a question…"
-          className="bg-background border-border"
+          className="bg-background/60 border-white/[0.05] rounded-xl"
         />
-        <Button type="submit" size="icon" disabled={sending || !input.trim()}>
+        <Button type="submit" size="icon" disabled={sending || !input.trim()} className="rounded-xl glow-primary-soft">
           <Send className="h-4 w-4" />
         </Button>
       </form>
@@ -238,7 +232,7 @@ const TopicDetail = () => {
   return (
     <main className="min-h-screen bg-background text-foreground pb-24">
       <AppNav />
-      <div className="mx-auto max-w-3xl px-5 py-6">
+      <div className="mx-auto max-w-3xl px-5 pt-6 pb-6">
         <div className="mb-5">
           <Button
             variant="ghost"
@@ -250,39 +244,33 @@ const TopicDetail = () => {
           </Button>
         </div>
 
-        <header className="mb-6 flex items-center gap-3">
-          <span
-            className="flex h-12 w-12 items-center justify-center rounded-[28%] bg-primary text-primary-foreground"
-            style={{
-              boxShadow:
-                "0 0 30px 0 hsl(var(--primary) / 0.55), 0 0 60px 6px hsl(var(--primary) / 0.2)",
-            }}
-          >
-            <Icon className="h-6 w-6" strokeWidth={2.5} />
+        <header className="mb-7 flex items-center gap-4">
+          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/12 text-primary">
+            <Icon className="h-6 w-6" strokeWidth={2.2} />
           </span>
           <div>
-            <h1 className="text-2xl font-extrabold tracking-tight">{topic.title}</h1>
-            <p className="text-sm text-muted-foreground">{topic.description}</p>
+            <h1 className="text-[24px] font-bold tracking-tight">{topic.title}</h1>
+            <p className="mt-0.5 text-[13px] text-muted-foreground">{topic.description}</p>
           </div>
         </header>
 
         {loading && (
-          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
-            <Loader2 className="h-8 w-8 animate-spin mb-3" />
-            <p className="text-sm">Buddy is preparing your lesson…</p>
+          <div className="flex flex-col items-center justify-center py-24 text-muted-foreground">
+            <Loader2 className="h-7 w-7 animate-spin mb-3 text-primary/80" />
+            <p className="text-[13px]">Buddy is preparing your lesson…</p>
           </div>
         )}
 
         {!loading && error && (
-          <Card className="border-destructive/40 bg-card p-5">
+          <Card className="surface-card p-6 border-destructive/30">
             <h2 className="font-semibold mb-2">Couldn't load lesson</h2>
-            <p className="text-sm text-muted-foreground mb-4">{error}</p>
+            <p className="text-[13.5px] text-muted-foreground mb-4 prose-lesson">{error}</p>
             <Button onClick={() => navigate(0)}>Retry</Button>
           </Card>
         )}
 
         {!loading && !error && lesson && (
-          <div className="space-y-4">
+          <div className="space-y-5">
             {lesson.intro && (
               <ResultCard icon={BookOpen} title="Introduction" content={lesson.intro} />
             )}
