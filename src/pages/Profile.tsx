@@ -45,19 +45,16 @@ const Profile = () => {
 
   return (
     <main className="min-h-screen bg-background text-foreground pb-24">
-      <div className="mx-auto max-w-2xl px-5 pt-8">
-        <header className="mb-6 flex items-center gap-4">
-          <div
-            className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground text-2xl font-bold"
-            style={{ boxShadow: "0 0 24px 0 hsl(var(--primary) / 0.5)" }}
-          >
+      <div className="mx-auto max-w-2xl px-5 pt-10">
+        <header className="mb-7 flex items-center gap-4">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/15 text-primary text-2xl font-semibold">
             {(profile?.display_name ?? user?.email ?? "U")[0].toUpperCase()}
           </div>
           <div className="flex-1">
-            <h1 className="text-xl font-extrabold tracking-tight">
+            <h1 className="text-[20px] font-bold tracking-tight">
               {profile?.display_name ?? "Learner"}
             </h1>
-            <p className="text-xs text-muted-foreground">{user?.email}</p>
+            <p className="text-[12px] text-muted-foreground">{user?.email}</p>
           </div>
           <Button size="icon" variant="ghost" onClick={signOut} aria-label="Sign out">
             <LogOut className="h-4 w-4" />
@@ -70,30 +67,29 @@ const Profile = () => {
           <Stat label="Lessons" value={completed} />
         </section>
 
-        <section className="mb-6 rounded-3xl border border-border bg-card p-5">
-          <div className="mb-2 flex items-center justify-between text-sm">
-            <span className="font-semibold">Level {lvl.level}</span>
+        <section className="mb-7 surface-card p-6">
+          <div className="mb-3 flex items-center justify-between text-[13.5px]">
+            <span className="font-semibold tracking-tight">Level {lvl.level}</span>
             <span className="text-muted-foreground">
               {lvl.into} / {lvl.span} XP
             </span>
           </div>
-          <div className="h-2 overflow-hidden rounded-full bg-secondary">
+          <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
             <div
-              className="h-full rounded-full bg-primary transition-all"
+              className="h-full rounded-full bg-primary glow-primary-soft transition-all duration-700"
               style={{
                 width: `${lvl.percent}%`,
-                boxShadow: "0 0 10px hsl(var(--primary) / 0.7)",
               }}
             />
           </div>
-          <p className="mt-2 text-xs text-muted-foreground">
-            {attempts} practice sessions completed
+          <p className="mt-3 text-[12px] text-muted-foreground">
+            {attempts} practice sessions · keep going, you're {lvl.span - lvl.into} XP from Level {lvl.level + 1}
           </p>
         </section>
 
         <section>
-          <h2 className="mb-3 flex items-center gap-1.5 text-sm font-semibold">
-            <Trophy className="h-4 w-4 text-primary" /> Achievements
+          <h2 className="mb-3 flex items-center gap-2 text-[11px] uppercase tracking-[0.14em] text-muted-foreground/80">
+            <Trophy className="h-3 w-3 text-primary/80" /> Achievements
           </h2>
           <div className="grid grid-cols-2 gap-3">
             {achievements.map((a) => {
@@ -102,26 +98,19 @@ const Profile = () => {
               return (
                 <div
                   key={a.id}
-                  className={`rounded-2xl border p-4 transition-all ${
-                    isUnlocked
-                      ? "border-primary/50 bg-card"
-                      : "border-border bg-card opacity-50"
+                  className={`surface-card p-4 transition-all ${
+                    isUnlocked ? "glow-primary-soft" : "opacity-55"
                   }`}
-                  style={
-                    isUnlocked
-                      ? { boxShadow: "0 0 20px -8px hsl(var(--primary) / 0.6)" }
-                      : undefined
-                  }
                 >
                   <span
                     className={`mb-2 inline-flex h-9 w-9 items-center justify-center rounded-xl ${
-                      isUnlocked ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"
+                      isUnlocked ? "bg-primary/15 text-primary" : "bg-white/[0.04] text-muted-foreground"
                     }`}
                   >
-                    <Icon className="h-5 w-5" strokeWidth={2.4} />
+                    <Icon className="h-[18px] w-[18px]" strokeWidth={2.2} />
                   </span>
-                  <p className="text-sm font-semibold leading-tight">{a.title}</p>
-                  <p className="mt-0.5 text-[11px] text-muted-foreground">{a.description}</p>
+                  <p className="text-[13.5px] font-semibold leading-tight tracking-tight">{a.title}</p>
+                  <p className="mt-1 text-[11.5px] text-muted-foreground leading-relaxed">{a.description}</p>
                 </div>
               );
             })}
@@ -134,9 +123,9 @@ const Profile = () => {
 };
 
 const Stat = ({ label, value }: { label: string; value: number | string }) => (
-  <div className="rounded-2xl border border-border bg-card p-3 text-center">
-    <p className="text-xl font-extrabold text-primary">{value}</p>
-    <p className="text-[11px] text-muted-foreground">{label}</p>
+  <div className="surface-card p-4 text-center">
+    <p className="text-[20px] font-bold tracking-tight text-foreground">{value}</p>
+    <p className="mt-0.5 text-[11px] text-muted-foreground uppercase tracking-wider">{label}</p>
   </div>
 );
 
