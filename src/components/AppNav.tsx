@@ -11,38 +11,33 @@ const tabs = [
 
 export const AppNav = () => (
   <nav
-    className="fixed bottom-0 inset-x-0 z-40 border-t border-border bg-background/85 backdrop-blur-xl"
+    className="fixed bottom-0 inset-x-0 z-40 border-t border-white/[0.04] bg-background/90 backdrop-blur-xl"
     style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
   >
-    <div className="mx-auto flex max-w-3xl items-stretch justify-around px-2 py-1.5">
+    <div className="mx-auto flex max-w-3xl items-stretch justify-around px-3 py-2">
       {tabs.map(({ to, label, icon: Icon, end }) => (
         <NavLink
           key={to}
           to={to}
           end={end}
           className={({ isActive }) =>
-            `group flex min-w-[60px] flex-col items-center justify-center gap-0.5 rounded-xl px-3 py-1.5 text-[11px] font-medium transition-all ${
+            `group flex min-w-[64px] flex-col items-center justify-center gap-1 rounded-xl px-3 py-1.5 text-[10.5px] font-medium transition-colors ${
               isActive
                 ? "text-primary"
-                : "text-muted-foreground hover:text-foreground"
+                : "text-muted-foreground/80 hover:text-foreground"
             }`
           }
         >
           {({ isActive }) => (
             <>
               <span
-                className={`flex h-8 w-8 items-center justify-center rounded-xl transition-all ${
-                  isActive ? "bg-primary/15 scale-105" : ""
+                className={`flex h-7 w-7 items-center justify-center rounded-lg transition-colors ${
+                  isActive ? "bg-primary/10" : ""
                 }`}
-                style={
-                  isActive
-                    ? { boxShadow: "0 0 18px 0 hsl(var(--primary) / 0.45)" }
-                    : undefined
-                }
               >
-                <Icon className="h-[18px] w-[18px]" strokeWidth={2.4} />
+                <Icon className="h-[17px] w-[17px]" strokeWidth={isActive ? 2.4 : 2} />
               </span>
-              <span className="leading-none">{label}</span>
+              <span className="leading-none tracking-tight">{label}</span>
             </>
           )}
         </NavLink>

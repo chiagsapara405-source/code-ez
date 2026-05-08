@@ -108,17 +108,14 @@ const Challenges = () => {
 
   return (
     <main className="min-h-screen bg-background text-foreground pb-24">
-      <div className="mx-auto max-w-2xl px-5 pt-8">
-        <header className="mb-6 flex items-center gap-3">
-          <span
-            className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground"
-            style={{ boxShadow: "0 0 20px 0 hsl(var(--primary) / 0.5)" }}
-          >
-            <Target className="h-5 w-5" strokeWidth={2.5} />
+      <div className="mx-auto max-w-2xl px-5 pt-10">
+        <header className="mb-7 flex items-center gap-4">
+          <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/12 text-primary">
+            <Target className="h-5 w-5" strokeWidth={2.2} />
           </span>
           <div>
-            <h1 className="text-2xl font-extrabold tracking-tight">Challenges</h1>
-            <p className="text-xs text-muted-foreground">
+            <h1 className="text-[24px] font-bold tracking-tight">Challenges</h1>
+            <p className="text-[12px] text-muted-foreground mt-0.5">
               Quick brain workouts · earn XP
             </p>
           </div>
@@ -129,18 +126,18 @@ const Challenges = () => {
             key={ch.id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-3xl border border-border bg-card p-5"
+            className="surface-card p-6"
           >
-            <div className="mb-3 flex items-center justify-between text-xs">
-              <span className="rounded-full bg-primary/15 px-2.5 py-1 text-primary font-semibold">
+            <div className="mb-4 flex items-center justify-between text-[11.5px]">
+              <span className="rounded-full bg-primary/12 px-2.5 py-1 text-primary font-semibold">
                 {TYPE_LABEL[ch.type]}
               </span>
               <span className="text-muted-foreground">
                 {idx + 1} / {CHALLENGES.length}
               </span>
             </div>
-            <h2 className="mb-3 text-base font-semibold">{ch.prompt}</h2>
-            <pre className="mb-4 overflow-x-auto rounded-xl border border-border bg-background p-3 text-xs leading-relaxed">
+            <h2 className="mb-4 text-[15.5px] font-semibold tracking-tight prose-lesson">{ch.prompt}</h2>
+            <pre className="mb-5 overflow-x-auto rounded-xl border border-white/[0.04] bg-background/60 p-4 text-[12.5px] leading-relaxed font-mono">
               <code>{ch.code}</code>
             </pre>
             <div className="grid gap-2">
@@ -153,12 +150,12 @@ const Challenges = () => {
                     key={i}
                     onClick={() => choose(i)}
                     disabled={picked !== null}
-                    className={`flex items-center justify-between rounded-xl border px-4 py-3 text-left text-sm transition-all ${
+                    className={`flex items-center justify-between rounded-xl border px-4 py-3 text-left text-[13.5px] transition-colors ${
                       isCorrect
-                        ? "border-primary bg-primary/15 text-foreground"
+                        ? "border-primary/40 bg-primary/10 text-foreground"
                         : isWrongPick
-                        ? "border-destructive/60 bg-destructive/10"
-                        : "border-border bg-background hover:border-primary/40"
+                        ? "border-destructive/40 bg-destructive/10"
+                        : "border-white/[0.05] bg-background/60 hover:border-primary/30"
                     }`}
                   >
                     <span>{opt}</span>
@@ -169,13 +166,13 @@ const Challenges = () => {
               })}
             </div>
             {picked !== null && (
-              <div className="mt-4 rounded-xl border border-border bg-background p-3 text-xs">
-                <p className="font-semibold mb-1 text-primary">Why?</p>
-                <p className="text-muted-foreground">{ch.explanation}</p>
+              <div className="mt-5 rounded-xl border border-white/[0.04] bg-background/60 p-4 text-[12.5px]">
+                <p className="font-semibold mb-1.5 text-primary">Why?</p>
+                <p className="text-muted-foreground prose-lesson">{ch.explanation}</p>
               </div>
             )}
             {picked !== null && (
-              <Button onClick={next} className="mt-4 w-full">
+              <Button onClick={next} className="mt-5 w-full glow-primary-soft rounded-xl">
                 {idx === CHALLENGES.length - 1 ? "Finish" : "Next"}
               </Button>
             )}
@@ -184,14 +181,13 @@ const Challenges = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="rounded-3xl border border-primary/30 bg-card p-6 text-center"
-            style={{ boxShadow: "0 0 40px -10px hsl(var(--primary) / 0.55)" }}
+            className="surface-card p-7 text-center glow-primary"
           >
-            <Sparkles className="mx-auto mb-3 h-10 w-10 text-primary" />
-            <h2 className="text-xl font-bold">Set complete!</h2>
-            <p className="mt-1 text-sm text-muted-foreground">You earned</p>
-            <p className="mt-1 text-4xl font-extrabold text-primary">+{score} XP</p>
-            <Button onClick={reset} className="mt-5 w-full">
+            <Sparkles className="mx-auto mb-3 h-9 w-9 text-primary" />
+            <h2 className="text-[20px] font-bold tracking-tight">Set complete</h2>
+            <p className="mt-1 text-[13px] text-muted-foreground">You earned</p>
+            <p className="mt-2 text-[40px] font-bold tracking-tight text-primary">+{score} XP</p>
+            <Button onClick={reset} className="mt-6 w-full rounded-xl">
               Play again
             </Button>
           </motion.div>

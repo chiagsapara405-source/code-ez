@@ -12,7 +12,7 @@ All colors MUST be HSL.
     --background: 0 0% 5%;            /* #0D0D0D */
     --foreground: 0 0% 96%;
 
-    --card: 0 0% 9%;                  /* slightly lighter card */
+    --card: 0 0% 7.5%;                /* calmer card surface */
     --card-foreground: 0 0% 96%;
 
     --popover: 0 0% 9%;
@@ -33,7 +33,7 @@ All colors MUST be HSL.
     --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 16%;
+    --border: 0 0% 14%;
     --input: 0 0% 13%;
     --ring: 152 76% 55%;
 
@@ -102,5 +102,35 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
+
+  /* Calm, breathable surfaces */
+  .surface-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(0 0% 100% / 0.05);
+    border-radius: 1.25rem;
+  }
+  .surface-card-hover {
+    transition: border-color .2s ease, transform .2s ease, background-color .2s ease;
+  }
+  .surface-card-hover:hover {
+    border-color: hsl(0 0% 100% / 0.09);
+  }
+
+  /* Reserved-for-emphasis glow (CTAs, active progress, achievements) */
+  .glow-primary {
+    box-shadow: 0 0 24px -8px hsl(var(--primary) / 0.55);
+  }
+  .glow-primary-soft {
+    box-shadow: 0 0 16px -10px hsl(var(--primary) / 0.5);
+  }
+
+  /* Readable lesson prose */
+  .prose-lesson {
+    line-height: 1.65;
+    letter-spacing: 0.005em;
+  }
+  .prose-lesson p + p { margin-top: 0.9rem; }
 }

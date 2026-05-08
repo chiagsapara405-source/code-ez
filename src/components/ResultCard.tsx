@@ -32,18 +32,14 @@ export const ResultCard = ({ icon: Icon, title, content, ordered }: Props) => {
   const isEmpty = Array.isArray(content) ? content.length === 0 : !content;
 
   return (
-    <Card className="bg-card border-border p-5 rounded-2xl">
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-base font-semibold flex items-center gap-3">
+    <Card className="surface-card surface-card-hover p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-[15px] font-semibold flex items-center gap-3">
           <span
-            className="flex h-9 w-9 items-center justify-center rounded-[28%] bg-primary text-primary-foreground"
-            style={{
-              boxShadow:
-                "0 0 18px 0 hsl(var(--primary) / 0.45), 0 0 36px 4px hsl(var(--primary) / 0.18)",
-            }}
+            className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary"
             aria-hidden
           >
-            <Icon className="h-4.5 w-4.5" strokeWidth={2.5} size={18} />
+            <Icon size={16} strokeWidth={2.4} />
           </span>
           <span className="tracking-tight">{title}</span>
         </h2>
@@ -62,20 +58,20 @@ export const ResultCard = ({ icon: Icon, title, content, ordered }: Props) => {
         <p className="text-sm text-muted-foreground">—</p>
       ) : Array.isArray(content) ? (
         ordered ? (
-          <ol className="list-decimal list-inside space-y-2 text-sm text-foreground/90">
+          <ol className="list-decimal list-inside space-y-2.5 text-[14px] text-foreground/90 prose-lesson">
             {content.map((item, i) => (
-              <li key={i} className="leading-relaxed">{item}</li>
+              <li key={i}>{item}</li>
             ))}
           </ol>
         ) : (
-          <ul className="list-disc list-inside space-y-2 text-sm text-foreground/90">
+          <ul className="list-disc list-inside space-y-2.5 text-[14px] text-foreground/90 prose-lesson">
             {content.map((item, i) => (
-              <li key={i} className="leading-relaxed">{item}</li>
+              <li key={i}>{item}</li>
             ))}
           </ul>
         )
       ) : (
-        <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap">
+        <p className="text-[14px] text-foreground/90 prose-lesson whitespace-pre-wrap">
           {content}
         </p>
       )}
