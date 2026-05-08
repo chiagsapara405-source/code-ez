@@ -164,7 +164,7 @@ const Home = () => {
                 className="surface-card surface-card-hover p-4"
               >
                 <span className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <t.icon className="h-4.5 w-4.5" size={18} strokeWidth={2.2} />
+                  <t.icon size={18} strokeWidth={2.2} />
                 </span>
                 <p className="text-[14px] font-semibold leading-tight tracking-tight">{t.title}</p>
                 <p className="mt-1 text-[11px] text-muted-foreground">{t.difficulty}</p>
