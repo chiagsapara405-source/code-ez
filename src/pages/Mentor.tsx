@@ -48,16 +48,13 @@ const Mentor = () => {
 
   return (
     <main className="flex min-h-screen flex-col bg-background text-foreground pb-24">
-      <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur">
+      <header className="sticky top-0 z-20 border-b border-white/[0.04] bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-2xl items-center gap-3 px-5 py-4">
-          <span
-            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground"
-            style={{ boxShadow: "0 0 18px 0 hsl(var(--primary) / 0.5)" }}
-          >
-            <Bot className="h-5 w-5" strokeWidth={2.5} />
+          <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/12 text-primary">
+            <Bot className="h-5 w-5" strokeWidth={2.2} />
           </span>
           <div>
-            <h1 className="text-lg font-extrabold tracking-tight">Buddy</h1>
+            <h1 className="text-[17px] font-bold tracking-tight">Buddy</h1>
             <p className="text-[11px] text-muted-foreground">AI coding mentor · always patient</p>
           </div>
         </div>
@@ -73,10 +70,10 @@ const Mentor = () => {
               className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap ${
+                className={`max-w-[85%] rounded-2xl px-4 py-3 text-[13.5px] leading-relaxed whitespace-pre-wrap ${
                   m.role === "user"
                     ? "bg-primary text-primary-foreground"
-                    : "border border-border bg-card"
+                    : "surface-card"
                 }`}
               >
                 {m.content}
@@ -94,7 +91,7 @@ const Mentor = () => {
                 <button
                   key={s}
                   onClick={() => setInput(s)}
-                  className="rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                  className="rounded-full border border-white/[0.05] bg-card px-3 py-1.5 text-[12px] text-muted-foreground hover:border-primary/40 hover:text-foreground transition-colors"
                 >
                   {s}
                 </button>
@@ -104,12 +101,13 @@ const Mentor = () => {
         </div>
       </div>
 
-      <div className="sticky bottom-[68px] border-t border-border bg-background/85 backdrop-blur">
+      <div className="sticky bottom-[68px] border-t border-white/[0.04] bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-2xl items-center gap-2 px-5 py-3">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask Buddy anything…"
+            className="bg-card border-white/[0.05] rounded-xl"
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -117,7 +115,7 @@ const Mentor = () => {
               }
             }}
           />
-          <Button onClick={send} disabled={busy || !input.trim()} size="icon">
+          <Button onClick={send} disabled={busy || !input.trim()} size="icon" className="rounded-xl glow-primary-soft">
             <Send className="h-4 w-4" />
           </Button>
         </div>
