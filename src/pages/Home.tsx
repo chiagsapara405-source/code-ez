@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { TOPICS } from "@/lib/topics";
 import { levelProgress } from "@/lib/xp";
-import { ArrowRight, Brain, Wrench, Target, Sparkles, Flame } from "lucide-react";
+import { ArrowRight, Brain, Wrench, Target, Sparkles, Flame, Clock, Rocket } from "lucide-react";
 
 type Stats = {
   totalXp: number;
@@ -57,91 +57,102 @@ const Home = () => {
 
   return (
     <main className="min-h-screen bg-background text-foreground pb-24">
-      <div className="mx-auto max-w-2xl px-5 pt-8">
-        <header className="mb-6 flex items-center justify-between">
+      <div className="mx-auto max-w-2xl px-5 pt-10">
+        <header className="mb-7 flex items-center justify-between">
           <div>
-            <p className="text-xs uppercase tracking-wider text-muted-foreground">Welcome back</p>
-            <h1 className="text-2xl font-extrabold tracking-tight">Hey, {stats.displayName} 👋</h1>
+            <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground/80">Welcome back</p>
+            <h1 className="mt-1 text-[26px] font-bold tracking-tight">Hi, {stats.displayName}</h1>
+            <p className="mt-1 text-[13px] text-muted-foreground flex items-center gap-1.5">
+              <Rocket className="h-3.5 w-3.5 text-primary/80" />
+              {stats.completed > 0
+                ? `You're improving fast — ${stats.completed} lesson${stats.completed === 1 ? "" : "s"} done`
+                : "Let's start your first lesson today"}
+            </p>
           </div>
-          <div className="flex items-center gap-1 rounded-full border border-border bg-card px-3 py-1.5 text-sm">
-            <Flame className="h-4 w-4 text-primary" />
+          <div className="flex items-center gap-1.5 rounded-full border border-white/[0.05] bg-card/70 px-3 py-1.5 text-[13px]">
+            <Flame className="h-3.5 w-3.5 text-primary" />
             <span className="font-semibold">{stats.totalXp}</span>
             <span className="text-muted-foreground">XP</span>
           </div>
         </header>
 
-        {/* Level / Progress ring card */}
-        <motion.section
+        {/* Continue learning — dominant hero */}
+        <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative mb-5 overflow-hidden rounded-3xl border border-border bg-card p-5"
-          style={{ boxShadow: "0 0 60px -20px hsl(var(--primary) / 0.5)" }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="mb-7"
         >
+          <p className="mb-2.5 text-[11px] uppercase tracking-[0.14em] text-muted-foreground/80">
+            Continue learning
+          </p>
+          <Link
+            to={`/academy/${resumeTopic.id}`}
+            className="group block surface-card surface-card-hover p-6 relative overflow-hidden"
+            style={{
+              backgroundImage:
+                "linear-gradient(135deg, hsl(var(--primary) / 0.06), hsl(var(--card)) 60%)",
+            }}
+          >
+            <div className="flex items-start gap-4">
+              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/12 text-primary">
+                <resumeTopic.icon className="h-6 w-6" strokeWidth={2.2} />
+              </span>
+              <div className="flex-1 min-w-0">
+                <h2 className="text-[19px] font-semibold tracking-tight">{resumeTopic.title}</h2>
+                <p className="mt-1 text-[13px] text-muted-foreground line-clamp-1">
+                  Next: {resumeTopic.description}
+                </p>
+
+                <div className="mt-4 flex items-center justify-between text-[12px]">
+                  <span className="font-medium text-foreground/90">68% completed</span>
+                  <span className="flex items-center gap-1 text-muted-foreground">
+                    <Clock className="h-3 w-3" /> ~5 min remaining
+                  </span>
+                </div>
+                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: "68%" }}
+                    transition={{ duration: 0.9, ease: "easeOut" }}
+                    className="h-full rounded-full bg-primary glow-primary-soft"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 flex items-center justify-end text-[13px] font-medium text-primary">
+              Resume lesson
+              <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </div>
+          </Link>
+        </motion.div>
+
+        {/* Daily progress */}
+        <section className="mb-7 surface-card p-5">
           <div className="flex items-center gap-4">
             <ProgressRing percent={lvl.percent} label={`L${lvl.level}`} />
             <div className="flex-1">
-              <p className="text-xs text-muted-foreground">Level {lvl.level}</p>
-              <p className="text-lg font-bold tracking-tight">
-                {lvl.into} / {lvl.span} XP
+              <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground/80">
+                Daily goal
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {stats.completed} lessons · {stats.achievements} badges
+              <p className="mt-0.5 text-[15px] font-semibold tracking-tight">
+                {lvl.span - lvl.into} XP to Level {lvl.level + 1}
+              </p>
+              <p className="mt-1 text-[12px] text-muted-foreground">
+                {stats.completed} lessons · {stats.achievements} achievements
               </p>
             </div>
           </div>
-        </motion.section>
-
-        {/* Resume learning */}
-        <Link
-          to={`/academy/${resumeTopic.id}`}
-          className="group mb-5 flex items-center justify-between rounded-3xl border border-primary/30 bg-card p-5 transition-colors hover:border-primary/60"
-          style={{ boxShadow: "0 0 28px -10px hsl(var(--primary) / 0.55)" }}
-        >
-          <div className="flex items-center gap-4">
-            <span
-              className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground"
-              style={{ boxShadow: "0 0 18px 0 hsl(var(--primary) / 0.5)" }}
-            >
-              <resumeTopic.icon className="h-6 w-6" strokeWidth={2.5} />
-            </span>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-primary">Resume learning</p>
-              <p className="text-base font-semibold">{resumeTopic.title}</p>
-            </div>
-          </div>
-          <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-        </Link>
-
-        {/* Quick tools */}
-        <section className="mb-6 grid grid-cols-3 gap-3">
-          {[
-            { to: "/explain", icon: Brain, label: "Explain" },
-            { to: "/refine", icon: Wrench, label: "Refine" },
-            { to: "/challenges", icon: Target, label: "Practice" },
-          ].map(({ to, icon: Icon, label }) => (
-            <Link
-              key={to}
-              to={to}
-              className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-card p-3 text-xs font-medium transition-colors hover:border-primary/40"
-            >
-              <span
-                className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary"
-                style={{ boxShadow: "inset 0 0 12px hsl(var(--primary) / 0.2)" }}
-              >
-                <Icon className="h-5 w-5" strokeWidth={2.4} />
-              </span>
-              {label}
-            </Link>
-          ))}
         </section>
 
         {/* Recommended */}
-        <section>
+        <section className="mb-7">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-sm font-semibold tracking-tight flex items-center gap-1.5">
-              <Sparkles className="h-4 w-4 text-primary" /> Recommended for you
+            <h2 className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground/80 flex items-center gap-1.5">
+              <Sparkles className="h-3 w-3 text-primary/80" /> Recommended for you
             </h2>
-            <Link to="/academy" className="text-xs text-muted-foreground hover:text-foreground">
+            <Link to="/academy" className="text-[12px] text-muted-foreground hover:text-foreground">
               See all
             </Link>
           </div>
@@ -150,15 +161,40 @@ const Home = () => {
               <Link
                 key={t.id}
                 to={`/academy/${t.id}`}
-                className="rounded-2xl border border-border bg-card p-4 transition-colors hover:border-primary/40"
+                className="surface-card surface-card-hover p-4"
               >
                 <span className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <t.icon className="h-5 w-5" strokeWidth={2.4} />
+                  <t.icon className="h-4.5 w-4.5" size={18} strokeWidth={2.2} />
                 </span>
-                <p className="text-sm font-semibold leading-tight">{t.title}</p>
-                <p className="mt-0.5 text-[11px] text-muted-foreground">{t.difficulty}</p>
+                <p className="text-[14px] font-semibold leading-tight tracking-tight">{t.title}</p>
+                <p className="mt-1 text-[11px] text-muted-foreground">{t.difficulty}</p>
               </Link>
             ))}
+          </div>
+        </section>
+
+        {/* Quick tools */}
+        <section className="mb-2">
+          <p className="mb-3 text-[11px] uppercase tracking-[0.14em] text-muted-foreground/80">
+            Quick actions
+          </p>
+          <div className="grid grid-cols-3 gap-3">
+          {[
+            { to: "/explain", icon: Brain, label: "Explain" },
+            { to: "/refine", icon: Wrench, label: "Refine" },
+            { to: "/challenges", icon: Target, label: "Practice" },
+          ].map(({ to, icon: Icon, label }) => (
+            <Link
+              key={to}
+              to={to}
+              className="surface-card surface-card-hover flex flex-col items-center gap-2 p-3 text-[12px] font-medium"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/8 text-primary">
+                <Icon className="h-[18px] w-[18px]" strokeWidth={2.2} />
+              </span>
+              {label}
+            </Link>
+          ))}
           </div>
         </section>
       </div>
@@ -168,29 +204,31 @@ const Home = () => {
 };
 
 const ProgressRing = ({ percent, label }: { percent: number; label: string }) => {
-  const r = 30;
+  const r = 28;
   const c = 2 * Math.PI * r;
   const offset = c - (percent / 100) * c;
   return (
-    <div className="relative h-[76px] w-[76px]">
-      <svg className="h-full w-full -rotate-90" viewBox="0 0 76 76">
-        <circle cx="38" cy="38" r={r} stroke="hsl(var(--secondary))" strokeWidth="6" fill="none" />
+    <div className="relative h-[72px] w-[72px]">
+      <svg className="h-full w-full -rotate-90" viewBox="0 0 72 72">
+        <circle cx="36" cy="36" r={r} stroke="hsl(0 0% 100% / 0.06)" strokeWidth="5" fill="none" />
         <motion.circle
-          cx="38"
-          cy="38"
+          cx="36"
+          cy="36"
           r={r}
           stroke="hsl(var(--primary))"
-          strokeWidth="6"
+          strokeWidth="5"
           strokeLinecap="round"
           fill="none"
           strokeDasharray={c}
           initial={{ strokeDashoffset: c }}
           animate={{ strokeDashoffset: offset }}
-          transition={{ duration: 0.9, ease: "easeOut" }}
-          style={{ filter: "drop-shadow(0 0 6px hsl(var(--primary) / 0.6))" }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          style={{ filter: "drop-shadow(0 0 4px hsl(var(--primary) / 0.45))" }}
         />
       </svg>
-      <div className="absolute inset-0 flex items-center justify-center text-sm font-bold">{label}</div>
+      <div className="absolute inset-0 flex items-center justify-center text-[13px] font-semibold tracking-tight">
+        {label}
+      </div>
     </div>
   );
 };
