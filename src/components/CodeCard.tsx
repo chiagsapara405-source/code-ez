@@ -33,18 +33,14 @@ export const CodeCard = ({ icon: Icon = Lightbulb, title, code, originalCode }: 
   };
 
   return (
-    <Card className="bg-card border-border p-5 rounded-2xl">
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-base font-semibold flex items-center gap-2">
+    <Card className="surface-card surface-card-hover p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-[15px] font-semibold flex items-center gap-3">
           <span
-            className="flex h-9 w-9 items-center justify-center rounded-[28%] bg-primary text-primary-foreground"
-            style={{
-              boxShadow:
-                "0 0 18px 0 hsl(var(--primary) / 0.45), 0 0 36px 4px hsl(var(--primary) / 0.18)",
-            }}
+            className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary"
             aria-hidden
           >
-            <Icon size={18} strokeWidth={2.5} />
+            <Icon size={16} strokeWidth={2.4} />
           </span>
           <span className="tracking-tight">{title}</span>
           {canDiff && (stats.added > 0 || stats.removed > 0) && (
@@ -81,10 +77,10 @@ export const CodeCard = ({ icon: Icon = Lightbulb, title, code, originalCode }: 
       </div>
 
       <div
-        className="rounded-xl border border-border/80 overflow-hidden"
+        className="rounded-xl overflow-hidden"
         style={{
-          background: "#111",
-          boxShadow: "0 0 0 1px hsl(var(--primary) / 0.08), 0 0 24px -8px hsl(var(--primary) / 0.15)",
+          background: "hsl(0 0% 6%)",
+          border: "1px solid hsl(0 0% 100% / 0.04)",
         }}
       >
         {canDiff && showDiff ? (
